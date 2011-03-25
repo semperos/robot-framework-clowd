@@ -1,0 +1,15 @@
+*** Settings ***
+Suite Setup     Start Browser  firefox  http://localhost:8080/
+Suite Teardown  Close Browser
+Library         Remote  http://localhost:8270
+
+*** Test Cases ***
+Test Keywords
+    ${url}=  Get Url
+    Log  ${url}
+    Click Link  text=example form
+    Go Back
+    Go Forward
+    Execute Javascript  alert('hello, clojure!');
+    ${window_count}=  Get Window Count
+    Log  ${window_count}
