@@ -4,7 +4,7 @@
                  [necessary-evil "1.1.0"]
                  [robot-remote-server "0.2.3"]
                  [org.seleniumhq.selenium/selenium-server "2.0b2"]
-                 ;;[clj-webdriver "0.1.4"] using /checkouts currently
+                 ;;[clj-webdriver "0.2.0"] using /checkouts currently
                  ]
   :dev-dependencies [[swank-clojure "1.3.0-SNAPSHOT"]
                      [marginalia "0.5.0"]]
