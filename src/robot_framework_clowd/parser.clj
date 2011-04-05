@@ -26,6 +26,7 @@
              (-> (re-find #"^([^=]+)=" desc)
                  second
                  .toLowerCase
+                 (str/replace "_" "-")
                  keyword))
            (for [desc descriptions]
              (-> (re-find #"^[^=]+=(.*?)$" desc)
