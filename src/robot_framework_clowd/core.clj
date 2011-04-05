@@ -1,8 +1,6 @@
 (ns robot-framework-clowd.core
-  (:use [robot-framework-clowd parser])
+  (:use [robot-framework-clowd parser state])
   (:require [clj-webdriver.core :as wd]))
-
-(def rf-browser (atom nil))
 
 ;; purposefully non-functional macro; relies on rf-browser,
 ;; which is used throughout the entirety of this library
@@ -101,14 +99,15 @@
     `(if (browser-anc-> ~tag wd/exists?)
        (throw (RuntimeException.
                (str "The HTML element described by the query "
-                    (str ~tag)
-                    "erroneously exists on the page: "
-                    (wd/page-source @rf-browser)))))
+                    (str ~tag) " "
+                    "erroneously exists on the page:\n"
+                    (wd/page-source @rf-browser))))
+       true)
     `(if (browser-> ~tag ~descriptor wd/exists?)
        (throw (RuntimeException.
                (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
-                    "erroneously exists on the page: "
+                    "erroneously exists on the page:\n"
                     (wd/page-source @rf-browser))))
        true)))
 
@@ -120,13 +119,14 @@
       (throw (RuntimeException.
               (str "The HTML element described by the query "
                    (str ~tag) " "
-                   "does not exist on the page: "
-                   (wd/page-source @rf-browser)))))
+                   "does not exist on the page:\n"
+                   (wd/page-source @rf-browser))))
+      true)
     `(if-not (browser-> ~tag ~descriptor wd/exists?)
        (throw (RuntimeException.
                (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
-                    "does not exist on the page: "
+                    "does not exist on the page:\n"
                     (wd/page-source @rf-browser))))
        true)))
 
@@ -137,14 +137,15 @@
     `(if (browser-anc-> ~tag wd/selected?)
        (throw (RuntimeException.
                (str "The HTML element described by the query "
-                    (str ~tag)
-                    "is erroneously selected on the page: "
-                    (wd/page-source @rf-browser)))))
+                    (str ~tag) " "
+                    "is erroneously selected on the page:\n"
+                    (wd/page-source @rf-browser))))
+       true)
     `(if (browser-> ~tag ~descriptor wd/selected?)
        (throw (RuntimeException.
                (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
-                    "is erroneously selected on the page: "
+                    "is erroneously selected on the page:\n"
                     (wd/page-source @rf-browser))))
        true)))
 
@@ -155,14 +156,15 @@
     `(if-not (browser-anc-> ~tag wd/selected?)
        (throw (RuntimeException.
                (str "The HTML element described by the query "
-                    (str ~tag)
-                    "is not selected on the page: "
-                    (wd/page-source @rf-browser)))))
+                    (str ~tag) " "
+                    "is not selected on the page:\n"
+                    (wd/page-source @rf-browser))))
+       true)
     `(if-not (browser-> ~tag ~descriptor wd/selected?)
        (throw (RuntimeException.
                (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
-                    "is not selected on the page: "
+                    "is not selected on the page:\n"
                     (wd/page-source @rf-browser))))
        true)))
 
