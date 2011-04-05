@@ -13,6 +13,9 @@
     nil "Hello, Clojure World!" "Greeting"
     JOptionPane/INFORMATION_MESSAGE))
 
+;; A single namespace is used because the remote server's
+;; `init-handler` macro looks in a single namespace for all
+;; of the functions defined as Robot Framework keywords.
 (load "keywords/area")
 (load "keywords/browser")
 (load "keywords/button")
