@@ -10,7 +10,8 @@
            java.awt.Dimension
            java.awt.Rectangle
            java.awt.image.BufferedImage
-           javax.imageio.ImageIO)
+           javax.imageio.ImageIO
+           java.awt.event.InputEvent)
   (:gen-class :main true))
 
 (defn open-dialog
