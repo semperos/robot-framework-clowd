@@ -1,7 +1,7 @@
 (ns robot-framework-clowd.keywords
   (:require [clj-webdriver.core :as wd] :reload-all
             [clj-webdriver.firefox :as firefox])
-  (:use [robot-framework-clowd core] :reload
+  (:use [robot-framework-clowd core parser] :reload
         robot-remote-server.core)
   (:import javax.swing.JOptionPane)
   (:gen-class :main true))
