@@ -50,7 +50,7 @@
        true)))
 
 (defmacro throw-not-str-contains
-  "Throw an exception if `str1` contains `str2` erroneously, return true otherwise"
+  "Throw an exception if `str1` does not contain `str2`, return true otherwise"
   [s1 s2 & messages]
   `(let [alpha# ~s1
          beta#  ~s2]
@@ -104,4 +104,40 @@
                   "described by the attributes \"" ~descriptor "\" "
                   "does not exist on the page: "
                   (wd/page-source @rf-browser))))
+     true))
+
+(defmacro throw-selected
+  "Throw an exception if the element matched by `tag` and `descriptor` is erroneously selected (e.g. a checkbox or radio button)"
+  [tag descriptor]
+  `(if (browser-> ~tag ~descriptor wd/selected?)
+     (throw (RuntimeException.
+             (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+                  "described by the attributes \"" ~descriptor "\" "
+                  "is erroneously selected on the page: "
+                  (wd/page-source @rf-browser))))
+     true))
+
+(defmacro throw-not-selected
+  "Throw an exception if the element matched by `tag` and `descriptor` is erroneously selected (e.g. a checkbox or radio button)"
+  [tag descriptor]
+  `(if-not (browser-> ~tag ~descriptor wd/selected?)
+     (throw (RuntimeException.
+             (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+                  "described by the attributes \"" ~descriptor "\" "
+                  "is not selected on the page: "
+                  (wd/page-source @rf-browser))))
+     true))
+
+(defmacro throw-fn-true
+  "Throw an exception if the function `a-fn` returns true. This is meant as a catch-all for less-frequently-used clj-webdriver functions that only take a single WebElement as an argument."
+  [a-fn tag descriptor exception-msg]
+  `(if (browser-> ~tag ~descriptor ~a-fn)
+     (throw (RuntimeException. ~exception-msg))
+     true))
+
+(defmacro throw-fn-false
+  "Throw an exception if the function `a-fn` returns true. This is meant as a catch-all for less-frequently-used clj-webdriver functions that only take a single WebElement as an argument."
+  [a-fn tag descriptor exception-msg]
+  `(if-not (browser-> ~tag ~descriptor ~a-fn)
+     (throw (RuntimeException. ~exception-msg))
      true))
