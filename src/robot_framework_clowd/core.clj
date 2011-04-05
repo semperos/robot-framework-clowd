@@ -13,6 +13,16 @@
        (wd/find-it (keyword ~tag) (parse-descriptor ~descriptor))
        ~@actions))
 
+(defmacro browser-anc->
+  "Similar to `browser->` macro, except it supports the ancestry-based query type for `find-it`"
+  [anc-query & actions]
+  `(-> @rf-browser
+       (wd/find-it (into []
+                         (map (fn [alpha# beta#] (alpha# beta#))
+                              (cycle [identity parse-descriptor])
+                              ~anc-query)))
+       ~@actions))
+
 ;; Convenience macros for performing actions and throwing consistent exceptions.
 ;; Read these by inserting the word "if" after the word "throw", e.g.
 ;; "throw if equals", "throw if contains", "throw if matches", etc.
@@ -87,55 +97,83 @@
 (defmacro throw-exists
   "Throw an exception if the element matched by `tag` and `descriptor` erroneously exists on the given web page"
   [tag descriptor]
-  `(if (browser-> ~tag ~descriptor wd/exists?)
-     (throw (RuntimeException.
-             (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
-                  "described by the attributes \"" ~descriptor "\" "
-                  "erroneously exists on the page: "
-                  (wd/page-source @rf-browser))))
-     true))
+  (if (vector? tag) ; support ancestry-based queries
+    `(if (browser-anc-> ~tag wd/exists?)
+       (throw (RuntimeException.
+               (str "The HTML element described by the query "
+                    (str ~tag)
+                    "erroneously exists on the page: "
+                    (wd/page-source @rf-browser)))))
+    `(if (browser-> ~tag ~descriptor wd/exists?)
+       (throw (RuntimeException.
+               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+                    "described by the attributes \"" ~descriptor "\" "
+                    "erroneously exists on the page: "
+                    (wd/page-source @rf-browser))))
+       true)))
 
 (defmacro throw-not-exists
   "Throw an exception if the element matched by `tag` and `descriptor` erroneously exists on the given web page"
   [tag descriptor]
-  `(if-not (browser-> ~tag ~descriptor wd/exists?)
-     (throw (RuntimeException.
-             (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
-                  "described by the attributes \"" ~descriptor "\" "
-                  "does not exist on the page: "
-                  (wd/page-source @rf-browser))))
-     true))
+  (if (vector? tag)
+    `(if-not (browser-anc-> ~tag wd/exists?)
+      (throw (RuntimeException.
+              (str "The HTML element described by the query "
+                   (str ~tag) " "
+                   "does not exist on the page: "
+                   (wd/page-source @rf-browser)))))
+    `(if-not (browser-> ~tag ~descriptor wd/exists?)
+       (throw (RuntimeException.
+               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+                    "described by the attributes \"" ~descriptor "\" "
+                    "does not exist on the page: "
+                    (wd/page-source @rf-browser))))
+       true)))
 
 (defmacro throw-selected
   "Throw an exception if the element matched by `tag` and `descriptor` is erroneously selected (e.g. a checkbox or radio button)"
   [tag descriptor]
-  `(if (browser-> ~tag ~descriptor wd/selected?)
-     (throw (RuntimeException.
-             (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
-                  "described by the attributes \"" ~descriptor "\" "
-                  "is erroneously selected on the page: "
-                  (wd/page-source @rf-browser))))
-     true))
+  (if (vector? tag)
+    `(if (browser-anc-> ~tag wd/selected?)
+       (throw (RuntimeException.
+               (str "The HTML element described by the query "
+                    (str ~tag)
+                    "is erroneously selected on the page: "
+                    (wd/page-source @rf-browser)))))
+    `(if (browser-> ~tag ~descriptor wd/selected?)
+       (throw (RuntimeException.
+               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+                    "described by the attributes \"" ~descriptor "\" "
+                    "is erroneously selected on the page: "
+                    (wd/page-source @rf-browser))))
+       true)))
 
 (defmacro throw-not-selected
   "Throw an exception if the element matched by `tag` and `descriptor` is erroneously selected (e.g. a checkbox or radio button)"
   [tag descriptor]
-  `(if-not (browser-> ~tag ~descriptor wd/selected?)
-     (throw (RuntimeException.
-             (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
-                  "described by the attributes \"" ~descriptor "\" "
-                  "is not selected on the page: "
-                  (wd/page-source @rf-browser))))
-     true))
+  (if (vector? tag)
+    `(if-not (browser-anc-> ~tag wd/selected?)
+       (throw (RuntimeException.
+               (str "The HTML element described by the query "
+                    (str ~tag)
+                    "is not selected on the page: "
+                    (wd/page-source @rf-browser)))))
+    `(if-not (browser-> ~tag ~descriptor wd/selected?)
+       (throw (RuntimeException.
+               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+                    "described by the attributes \"" ~descriptor "\" "
+                    "is not selected on the page: "
+                    (wd/page-source @rf-browser))))
+       true)))
 
-(defmacro throw-fn-true
+(defmacro throw-wdfn-true
   "Throw an exception if the function `a-fn` returns true. This is meant as a catch-all for less-frequently-used clj-webdriver functions that only take a single WebElement as an argument."
   [a-fn tag descriptor exception-msg]
   `(if (browser-> ~tag ~descriptor ~a-fn)
      (throw (RuntimeException. ~exception-msg))
      true))
 
-(defmacro throw-fn-false
+(defmacro throw-wdfn-false
   "Throw an exception if the function `a-fn` returns true. This is meant as a catch-all for less-frequently-used clj-webdriver functions that only take a single WebElement as an argument."
   [a-fn tag descriptor exception-msg]
   `(if-not (browser-> ~tag ~descriptor ~a-fn)
