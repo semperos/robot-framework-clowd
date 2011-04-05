@@ -32,7 +32,7 @@
 (defn element-should-be-visible
   "Verify that the specified element is visible"
   [descriptor]
-  (throw-fn-false wd/visible? :* descriptor
+  (throw-wdfn-false wd/visible? :* descriptor
                   (str "The HTML element described by the attributes \""
                        descriptor "\" "
                        "is not visible on the page: "
@@ -41,7 +41,7 @@
 (defn element-should-not-be-visible
   "Verify that the specified element is visible"
   [descriptor]
-  (throw-fn-true wd/visible? :* descriptor
+  (throw-wdfn-true wd/visible? :* descriptor
                   (str "The HTML element described by the attributes \""
                        descriptor "\" "
                        "is erroneously visible on the page: "
@@ -50,7 +50,7 @@
 (defn element-should-be-enabled
   "Verify that the specified element is enabled"
   [descriptor]
-  (throw-fn-false wd/enabled? :* descriptor
+  (throw-wdfn-false wd/enabled? :* descriptor
                   (str "The HTML element described by the attributes \""
                        descriptor "\" "
                        "is not enabled on the page: "
@@ -59,7 +59,7 @@
 (defn element-should-not-be-enabled
   "Verify that the specified element is enabled"
   [descriptor]
-  (throw-fn-true wd/enabled? :* descriptor
+  (throw-wdfn-true wd/enabled? :* descriptor
                   (str "The HTML element described by the attributes \""
                        descriptor "\" "
                        "is erroneously enabled on the page: "
@@ -68,7 +68,7 @@
 (defn element-should-be-present
   "Verify that the specified element is present (i.e. both exists and is visible)"
   [descriptor]
-  (throw-fn-false wd/present? :* descriptor
+  (throw-wdfn-false wd/present? :* descriptor
                   (str "The HTML element described by the attributes \""
                        descriptor "\" "
                        "does not exist or is not visible on the page: "
@@ -77,20 +77,32 @@
 (defn element-should-not-be-present
   "Verify that the specified element is present (i.e. both exists and is visible)"
   [descriptor]
-  (throw-fn-true wd/present? :* descriptor
+  (throw-wdfn-true wd/present? :* descriptor
                   (str "The HTML element described by the attributes \""
                        descriptor "\" "
                        "erroneously exists and/or is visible on the page: "
                        (wd/page-source @rf-browser))))
 
 (defn element-text-should-contain
-  "Verify that the text of hte specified element contains `text`"
+  "Verify that the text of the specified element contains `text`"
   [descriptor text]
   (let [element-text (browser-> :* descriptor wd/text)]
     (throw-not-str-contains element-text text)))
 
 (defn element-text-should-not-contain
-  "Verify that the text of hte specified element contains `text`"
+  "Verify that the text of the specified element contains `text`"
   [descriptor text]
   (let [element-text (browser-> :* descriptor wd/text)]
     (throw-str-contains element-text text)))
+
+(defn element-text-should-be
+  "Verify that the text of the specified element's text equals `text`"
+  [descriptor text]
+  (let [element-text (browser-> :* descriptor wd/text)]
+    (throw-not= element-text text)))
+
+(defn element-text-should-not-be
+  "Verify that the text of the specified element's text equals `text`"
+  [descriptor text]
+  (let [element-text (browser-> :* descriptor wd/text)]
+    (throw= element-text text)))
