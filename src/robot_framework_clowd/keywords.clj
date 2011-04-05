@@ -1,9 +1,16 @@
 (ns robot-framework-clowd.keywords
   (:require [clj-webdriver.core :as wd] :reload-all
             [clj-webdriver.firefox :as firefox])
-  (:use [robot-framework-clowd core parser] :reload
+  (:use robot-framework-clowd.state
+        [robot-framework-clowd core parser] :reload
         robot-remote-server.core)
-  (:import javax.swing.JOptionPane)
+  (:import javax.swing.JOptionPane
+           java.awt.Robot
+           java.awt.Toolkit
+           java.awt.Dimension
+           java.awt.Rectangle
+           java.awt.image.BufferedImage
+           javax.imageio.ImageIO)
   (:gen-class :main true))
 
 (defn open-dialog
