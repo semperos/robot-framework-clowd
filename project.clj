@@ -1,4 +1,4 @@
-(defproject robot-framework-clowd "0.0.1-SNAPSHOT"
+(defproject robot-framework-clowd "0.1.0"
   :description "RobotFramework keyword library for web testing written in Clojure leveraging Selenium-WebDriver"
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [necessary-evil "1.1.0"]
