@@ -25,7 +25,12 @@
 (defn type-text
   "Type the given string 'onto' the specified element"
   [descriptor text]
-  (browser-> :* descriptor wd/input-text))
+  (browser-> :* descriptor (wd/input-text text)))
+
+(defn input-text
+  "Type the given string into the specified input field"
+  [descriptor text]
+  (browser-> :input descriptor (wd/input-text text)))
 
 ;; ## Conditions
 
