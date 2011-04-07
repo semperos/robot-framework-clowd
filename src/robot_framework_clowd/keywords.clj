@@ -45,4 +45,4 @@
   []
   (do (use 'robot-remote-server.core
            'robot-framework-clowd.xml-rpc.value :reload-all) ; value ns extends protocols
-      (server-start! (init-handler false))))     ; for handling WebDriver classes
+      (server-start! (init-handler))))     ; for handling WebDriver classes
