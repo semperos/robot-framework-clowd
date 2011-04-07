@@ -43,12 +43,12 @@
   (throw-exists :area descriptor))
 
 (defn page-should-contain-button
-  "Verify button (either `<button>` tag or `<input>` of type submit, reset, image or button) exists on the page"
+  "Verify button (either `button` tag or `input` tag of type submit, reset, image or button) exists on the page"
   [descriptor]
   (throw-not-exists :button* descriptor))
 
 (defn page-should-not-contain-button
-  "Verify button (either `<button>` tag or `<input>` of type submit, reset, image or button) does not exist on the page"
+  "Verify button (either `button` tag or `input` tag of type submit, reset, image or button) does not exist on the page"
   [descriptor]
   (throw-exists :button* descriptor))
 
@@ -93,12 +93,12 @@
   (throw-exists :img descriptor))
 
 (defn page-should-contain-link
-  "Verify that the link (`<a>` tag) exists on the page"
+  "Verify that the link (`a` tag) exists on the page"
   [descriptor]
   (throw-not-exists :a descriptor))
 
 (defn page-should-not-contain-link
-  "Verify that the link (`<a>` tag) does not exist on the page"
+  "Verify that the link (`a` tag) does not exist on the page"
   [descriptor]
   (throw-exists :a descriptor))
 
