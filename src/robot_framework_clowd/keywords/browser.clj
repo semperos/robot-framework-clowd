@@ -44,8 +44,7 @@
 (defn get-url
   "Retrieve the URL of the current page"
   []
-  (wd/current-url @rf-browser)
-  @rf-browser)
+  (wd/current-url @rf-browser))
 
 (defn go-to
   "Navigate to the specified URL"
