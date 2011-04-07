@@ -3,7 +3,12 @@ pom.xml
 lib
 classes
 checkouts
-/resources/output.html
-/resources/log.html
-/resources/report.html
+output.html
+output*.html
+report.html
+report*.html
+log.html
+log*.html
+output.xml
+output*.xml
 *screenshot.png
