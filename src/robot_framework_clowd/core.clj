@@ -105,7 +105,7 @@
        true)
     `(if (browser-> ~tag ~descriptor wd/exists?)
        (throw (RuntimeException.
-               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+               (str "The HTML element " (name ~tag) " " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
                     "erroneously exists on the page:\n"
                     (wd/page-source @rf-browser))))
@@ -124,7 +124,7 @@
       true)
     `(if-not (browser-> ~tag ~descriptor wd/exists?)
        (throw (RuntimeException.
-               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+               (str "The HTML element " (name ~tag) " " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
                     "does not exist on the page:\n"
                     (wd/page-source @rf-browser))))
@@ -143,7 +143,7 @@
        true)
     `(if (browser-> ~tag ~descriptor wd/selected?)
        (throw (RuntimeException.
-               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+               (str "The HTML element " (name ~tag) " " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
                     "is erroneously selected on the page:\n"
                     (wd/page-source @rf-browser))))
@@ -162,7 +162,7 @@
        true)
     `(if-not (browser-> ~tag ~descriptor wd/selected?)
        (throw (RuntimeException.
-               (str "The HTML element <" (name ~tag) "> " ; though RF always sends strings
+               (str "The HTML element " (name ~tag) " " ; though RF always sends strings
                     "described by the attributes \"" ~descriptor "\" "
                     "is not selected on the page:\n"
                     (wd/page-source @rf-browser))))
