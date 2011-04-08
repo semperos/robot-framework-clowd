@@ -33,14 +33,15 @@
                  second
                  str/trim
                  .toLowerCase
-                 (str/replace "_" "-")
+                 (str/replace #"[^a-z]" "") ; prevent injection attacks
+                 (str/replace "_" "-")      ; make it nice for Clojure
                  keyword))
            (for [desc descriptions]
              (-> (re-find #"^[^=]+=(.*?)$" desc)
                  second
                  str/trim
                  parse-regex)))
-          handle-nums))))
+          handle-nums)))) ; certain args should be numbers; make them so
 
 (defn parse-item-selection
   "Parse RF parameters for describing an item in a select list. Return vector, first item a fn for selecting, the second item the param to that fn"
